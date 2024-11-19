@@ -11,9 +11,5 @@
       "url": "https://json.schemastore.org/package"
     }
   ],
-  "material-icon-theme.folders.associations": {
-    "xcad": "src"
-  },
-  "material-icon-theme.folders.color": "#ef5350",
-  "rust-analyzer.linkedProjects": ["Cargo.toml"],
+  "rust-analyzer.linkedProjects": ["Cargo.toml"]
 }

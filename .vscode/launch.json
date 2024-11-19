@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Cargo build for 'xcloud'",
+      "cargo": {
+        "args": ["build", "--package=xcloud"],
+        "filter": {
+          "name": "xcloud",
+          "kind": "bin"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "RUST_LOG": "info"
+      },
+      "console": "integratedTerminal"
+    }
+  ]
+}

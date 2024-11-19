@@ -2,14 +2,11 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build xcad",
+      "label": "Build xcloud",
       "type": "shell",
       "command": "cargo",
-      "args": ["build", "--target=x86_64-pc-windows-gnu", "--release"],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
+      "args": ["build", "--release", "--package=xcloud"],
+      "group": "build",
       "problemMatcher": ["$rustc"]
     }
   ]

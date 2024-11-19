@@ -3,7 +3,7 @@
 <h1 align="center">
   <br />
     <a href="https://xodium.org/">
-      <img src="https://gist.githubusercontent.com/illyrius666/a38f03b4fbe9b43faa2c5623137c1250/raw/121c2119ac45c05cf7792b815bb30952520205b4/xCAD.svg" alt="xCAD Logo" width="200">
+      <img src="https://gist.githubusercontent.com/illyrius666/a38f03b4fbe9b43faa2c5623137c1250/raw/3a1410e77807097bcfbcf963822b41fadd495d9f/xodium.svg" alt="xCAD Logo" width="200">
     </a>
   <br /><br />
   xCAD
@@ -11,7 +11,7 @@
   <br />
 </h1>
 
-<h4 align="center">CAD addon/plug-in providing automative tools written in Rust.</h4><br />
+<h4 align="center">CAD software providing automative tools written in Rust.</h4><br />
 
 <div align="center">
 
@@ -59,7 +59,7 @@ Feel free to dive into the documentation to kickstart your journey with xCAD.
 
 </details><p align="right"><a href="#readme-top">▲</a></p>
 
-[built_with_shield_url]: https://skillicons.dev/icons?i=docker,rust
+[built_with_shield_url]: https://skillicons.dev/icons?i=vscode,docker,rust,sqlite,github,githubactions,html,css,js,wasm,svg
 [built_with_url]: https://skillicons.dev
 [code_of_conduct_url]: https://github.com/XodiumSoftware/xCAD?tab=coc-ov-file
 [contributing_url]: https://github.com/XodiumSoftware/xCAD/blob/main/CONTRIBUTING.md
