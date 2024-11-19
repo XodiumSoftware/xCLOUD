@@ -1,0 +1,36 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/rust",
+  "remoteUser": "root",
+  "hostRequirements": {
+    "gpu": true
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "github.copilot",
+        "github.vscode-github-actions",
+        "jock.svg",
+        "pkief.material-icon-theme",
+        "qwtel.sqlite-viewer",
+        "swellaby.vscode-rust-test-adapter",
+        "tamasfe.even-better-toml",
+        "usernamehw.errorlens",
+        "vsls-contrib.gistfs"
+      ]
+    }
+  },
+  "onCreateCommand": {
+    "installGccMingw": "sudo apt-get update && sudo apt-get install -y gcc-mingw-w64-x86-64",
+    "addRustTarget": "rustup target add x86_64-pc-windows-gnu"
+  },
+  "shutdownAction": "stopContainer"
+}
