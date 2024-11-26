@@ -21,7 +21,7 @@ jobs:
       name: ${{ github.ref_name }}
       url: ${{ steps.upload_artifact.outputs.artifact-url }}
     outputs:
-      VERSION: ${{ steps.get_version.outputs.VERSION }}
+      VERSION: ${{ steps.get_artifact_version.outputs.VERSION }}
     steps:
       - id: checkout
         name: Checkout
@@ -37,9 +37,9 @@ jobs:
         name: Install toml-cli
         run: cargo install toml-cli
 
-      - id: get_version
-        name: Get Version
-        run: echo "VERSION=$(toml get xcloud/Cargo.toml package.version)" >> $GITHUB_OUTPUT
+      - id: get_artifact_version
+        name: Get Artifact Version
+        run: echo VERSION=v$(toml get xcloud/Cargo.toml package.version | tr -d '"') > $GITHUB_OUTPUT
 
       - id: upload_artifact
         name: Upload Artifact
@@ -104,7 +104,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
-      url: ${{ steps.create_release.outputs.url }}
+      url: ${{ steps.release_artifact.outputs.url }}
     steps:
       - id: download_artifact
         name: Download Artifact
@@ -112,8 +112,8 @@ jobs:
         with:
           name: xcloud
 
-      - id: create_release
-        name: Create Release
+      - id: release_artifact
+        name: Release Artifact
         uses: softprops/action-gh-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -122,3 +122,4 @@ jobs:
           generate_release_notes: true
           prerelease: ${{ contains(github.event.head_commit.message, '.pre') }}
           tag_name: ${{ needs.setup.outputs.VERSION }}
+          files: target/release/xcloud
