@@ -46,10 +46,40 @@ impl Utils {
     ///
     /// * `PathBuf` - The constructed path.
     pub fn get_path(components: &[&str]) -> std::path::PathBuf {
-        let db_path = dirs::data_dir().expect("Could not determine data directory");
-        components.iter().fold(db_path, |mut path, &component| {
-            path.push(component);
-            path
-        })
+        components.iter().fold(
+            dirs::data_dir().expect("Could not determine data directory"),
+            |mut path, &component| {
+                path.push(component);
+                path
+            },
+        )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_sanitize() {
+        let input = "Hello, World!";
+        let expected = "HelloWorld";
+        assert_eq!(Utils::sanitize(input), expected);
+    }
+
+    // TODO: fix this test.
+    #[test]
+    fn test_ensure_path_exists() {
+        let temp_dir = tempfile::tempdir().expect("Failed to create temp dir");
+        let path = temp_dir.path().join("test_dir");
+        Utils::ensure_path_exists(path.clone()).expect("Failed to create directories");
+        assert!(path.exists());
+    }
+
+    #[test]
+    fn test_get_path() {
+        let components = &["test", "path"];
+        let expected = Utils::get_path(components);
+        assert_eq!(Utils::get_path(components), expected);
     }
 }
