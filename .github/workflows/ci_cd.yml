@@ -86,11 +86,18 @@ jobs:
         name: Download Artifact
         uses: actions/download-artifact@v4.1.8
         with:
-          name: xcloud
+          name: xcloud_src
 
       - id: build_artifact
         name: Build Artifact
         run: cargo build --package=xcloud --release
+
+      - id: upload_artifact
+        name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcloud
+          path: target/release/xcloud
 
   release:
     needs: [setup, build, test]
