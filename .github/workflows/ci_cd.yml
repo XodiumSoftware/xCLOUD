@@ -48,30 +48,30 @@ jobs:
           name: xcloud_src
           path: ./
 
-  # test:
-  #   needs: [setup]
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: ${{ github.ref_name }}
-  #   steps:
-  #     - id: setup_rust
-  #       name: Setup Rust
-  #       uses: actions-rs/toolchain@v1
-  #       with:
-  #         toolchain: stable
+  test:
+    needs: [setup]
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name }}
+    steps:
+      - id: setup_rust
+        name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
 
-  #     - id: download_artifact
-  #       name: Download Artifact
-  #       uses: actions/download-artifact@v4.1.8
-  #       with:
-  #         name: xcloud_src
+      - id: download_artifact
+        name: Download Artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: xcloud_src
 
-  #     - id: run_tests
-  #       name: Run Tests
-  #       run: cargo test --all
+      - id: run_tests
+        name: Run Tests
+        run: cargo test --all
 
   build:
-    needs: [setup] #add test after debugging, remove setup.
+    needs: [setup, test]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
@@ -100,7 +100,7 @@ jobs:
           path: target/release/xcloud
 
   release:
-    needs: [setup, build] #add test after debugging.
+    needs: [setup, test, build]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
