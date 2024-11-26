@@ -31,14 +31,15 @@ impl Database {
     ///
     /// This function will return an error if the table cannot be initialized.
     pub async fn init_table(&self, table: &str) -> Result<(), sqlx::Error> {
-        let query = format!(
+        sqlx::query(&format!(
             "CREATE TABLE IF NOT EXISTS \"{}\" (
                 key TEXT PRIMARY KEY,
                 value TEXT NOT NULL
             )",
             Utils::sanitize(table)
-        );
-        sqlx::query(&query).execute(&*self.pool).await?;
+        ))
+        .execute(&*self.pool)
+        .await?;
         Ok(())
     }
 

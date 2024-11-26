@@ -6,6 +6,3 @@ Cargo.lock
 *.sqlite
 *.db
 *.sqlx
-
-# trunk output folder
-dist
