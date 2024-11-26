@@ -6,11 +6,11 @@ pub struct Database {
 }
 
 impl Database {
-    /// Creates a new [`Database`].
+    /// Connects to a  [`Database`].
     ///
     /// # Errors
     ///
-    /// This function will return an error if the database cannot be created.
+    /// This function will return an error if the database cannot be connected to.
     pub async fn new() -> Result<Self, sqlx::Error> {
         let pool = sqlx::MySqlPool::connect(&format!("mysql://")).await?;
         Ok(Self {
