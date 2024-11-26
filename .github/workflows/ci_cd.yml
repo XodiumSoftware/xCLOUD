@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_backend:
+  build:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
@@ -49,11 +49,11 @@ jobs:
         name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: backend_artifact
+          name: xcloud
           path: target/release/xcloud
 
   test:
-    needs: [build_backend]
+    needs: [build]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
@@ -74,8 +74,8 @@ jobs:
         name: Run Tests
         run: cargo test --all
 
-  release_backend:
-    needs: [build_backend, test]
+  release:
+    needs: [build, test]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
@@ -85,7 +85,7 @@ jobs:
         name: Download Artifact
         uses: actions/download-artifact@v4.1.8
         with:
-          name: backend_artifact
+          name: xcloud
 
       - id: create_release
         name: Create Release
@@ -96,4 +96,4 @@ jobs:
           draft: ${{ contains(github.event.head_commit.message, '.draft') }}
           generate_release_notes: true
           prerelease: ${{ contains(github.event.head_commit.message, '.pre') }}
-          tag_name: ${{ needs.build_backend.outputs.VERSION }}
+          tag_name: ${{ needs.build.outputs.VERSION }}
