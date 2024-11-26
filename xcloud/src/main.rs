@@ -1,10 +1,10 @@
-mod db;
+mod database;
 mod middleware;
 mod response;
 mod server;
 mod utils;
 
-use db::Database;
+use database::Database;
 use server::Server;
 use sqlx::Error as SqlxError;
 use std::io::Error as IoError;

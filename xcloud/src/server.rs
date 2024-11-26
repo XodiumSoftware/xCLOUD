@@ -5,7 +5,7 @@ use actix_web::{http, web, App, HttpResponse, HttpServer};
 use serde::{Deserialize, Serialize};
 use tokio::sync::Mutex;
 
-use crate::db::Database;
+use crate::database::Database;
 use crate::middleware::RequestLogger;
 use crate::response::ApiResponse;
 
