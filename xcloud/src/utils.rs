@@ -17,43 +17,6 @@ impl Utils {
             .filter(|c| c.is_alphanumeric() || *c == '_')
             .collect()
     }
-
-    /// Ensures that the given path exists by creating any missing directories.
-    ///
-    /// # Arguments
-    ///
-    /// * `path` - A PathBuf that holds the path to check.
-    ///
-    /// # Returns
-    ///
-    /// * `Result<()>` - A result indicating success or failure.
-    pub fn ensure_path_exists(path: std::path::PathBuf) -> std::io::Result<()> {
-        if let Some(parent) = path.parent() {
-            if !parent.exists() {
-                std::fs::create_dir_all(parent).expect("Failed to create directories");
-            }
-        }
-        Ok(())
-    }
-
-    /// Constructs a path from the given components.
-    ///
-    /// # Arguments
-    ///
-    /// * `components` - A slice of string slices representing the components of the path.
-    ///
-    /// # Returns
-    ///
-    /// * `PathBuf` - The constructed path.
-    pub fn get_path(components: &[&str]) -> std::path::PathBuf {
-        components.iter().fold(
-            dirs::data_dir().expect("Could not determine data directory"),
-            |mut path, &component| {
-                path.push(component);
-                path
-            },
-        )
-    }
 }
 
 #[cfg(test)]
@@ -65,21 +28,5 @@ mod tests {
         let input = "Hello, World!";
         let expected = "HelloWorld";
         assert_eq!(Utils::sanitize(input), expected);
-    }
-
-    // TODO: fix this test.
-    #[test]
-    fn test_ensure_path_exists() {
-        let temp_dir = tempfile::tempdir().expect("Failed to create temp dir");
-        let path = temp_dir.path().join("test_dir");
-        Utils::ensure_path_exists(path.clone()).expect("Failed to create directories");
-        assert!(path.exists());
-    }
-
-    #[test]
-    fn test_get_path() {
-        let components = &["test", "path"];
-        let expected = Utils::get_path(components);
-        assert_eq!(Utils::get_path(components), expected);
     }
 }

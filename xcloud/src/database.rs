@@ -2,7 +2,7 @@ use crate::utils::Utils;
 
 /// A struct that represents a database.
 pub struct Database {
-    pool: std::sync::Arc<sqlx::SqlitePool>,
+    pool: std::sync::Arc<sqlx::MySqlPool>,
 }
 
 impl Database {
@@ -12,10 +12,7 @@ impl Database {
     ///
     /// This function will return an error if the database cannot be created.
     pub async fn new() -> Result<Self, sqlx::Error> {
-        let db_path = Utils::get_path(&["xcloud", "data", "xcloud.db"]);
-        log::info!("Database path: {:?}", db_path);
-        Utils::ensure_path_exists(db_path.clone())?;
-        let pool = sqlx::SqlitePool::connect(&format!("sqlite://{}", db_path.display())).await?;
+        let pool = sqlx::MySqlPool::connect(&format!("mysql://")).await?;
         Ok(Self {
             pool: std::sync::Arc::new(pool),
         })
