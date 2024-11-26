@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
@@ -33,10 +33,6 @@ jobs:
         with:
           toolchain: stable
 
-      - id: build_artifact
-        name: Build Artifact
-        run: cargo build --package=xcloud --release
-
       - id: install_toml_cli
         name: Install toml-cli
         run: cargo install toml-cli
@@ -49,33 +45,55 @@ jobs:
         name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: xcloud
-          path: target/release/xcloud
+          name: xcloud_src
+          path: ./
 
   test:
-    needs: [build]
+    needs: [setup]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
     steps:
-      - id: download_artifact
-        name: Download Artifact
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: xcloud
-
       - id: setup_rust
         name: Setup Rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
 
+      - id: download_artifact
+        name: Download Artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: xcloud_src
+
       - id: run_tests
         name: Run Tests
         run: cargo test --all
 
+  build:
+    needs: [test]
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name }}
+    steps:
+      - id: setup_rust
+        name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - id: download_artifact
+        name: Download Artifact
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: xcloud
+
+      - id: build_artifact
+        name: Build Artifact
+        run: cargo build --package=xcloud --release
+
   release:
-    needs: [build, test]
+    needs: [setup, build, test]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
@@ -96,4 +114,4 @@ jobs:
           draft: ${{ contains(github.event.head_commit.message, '.draft') }}
           generate_release_notes: true
           prerelease: ${{ contains(github.event.head_commit.message, '.pre') }}
-          tag_name: ${{ needs.build.outputs.VERSION }}
+          tag_name: ${{ needs.setup.outputs.VERSION }}
