@@ -71,7 +71,7 @@ jobs:
         run: cargo test --all
 
   build:
-    needs: [test]
+    needs: [setup, test]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
@@ -100,7 +100,7 @@ jobs:
           path: target/release/xcloud
 
   release:
-    needs: [setup, build, test]
+    needs: [setup, test, build]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
@@ -122,4 +122,4 @@ jobs:
           generate_release_notes: true
           prerelease: ${{ contains(github.event.head_commit.message, '.pre') }}
           tag_name: ${{ needs.setup.outputs.VERSION }}
-          files: target/release/xcloud
+          files: ./*

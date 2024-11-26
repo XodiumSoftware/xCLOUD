@@ -1,12 +1,25 @@
-mod db;
-mod errors;
+mod database;
 mod middleware;
+mod response;
 mod server;
+mod tables;
 mod utils;
 
-use db::Database;
-use errors::AppError;
+use database::Database;
 use server::Server;
+use sqlx::Error as SqlxError;
+use std::io::Error as IoError;
+use thiserror::Error;
+
+/// Custom error type for the application.
+#[derive(Error, Debug)]
+pub enum AppError {
+    #[error("Database error: {0}")]
+    Sqlx(#[from] SqlxError),
+
+    #[error("IO error: {0}")]
+    Io(#[from] IoError),
+}
 
 /// Main function for the application.
 #[actix_web::main]

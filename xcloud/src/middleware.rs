@@ -21,6 +21,13 @@ where
     type InitError = ();
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
+    /// Creates a new instance of the middleware.
+    ///
+    /// # Parameters
+    /// - `service`: The service to wrap with the middleware.
+    ///
+    /// # Returns
+    /// A future that resolves to the new middleware instance.
     fn new_transform(&self, service: S) -> Self::Future {
         ok(RequestLoggerMiddleware { service })
     }
