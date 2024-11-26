@@ -2,6 +2,7 @@ mod database;
 mod middleware;
 mod response;
 mod server;
+mod tables;
 mod utils;
 
 use database::Database;
