@@ -15,51 +15,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_frontend:
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name }}
-      url: ${{ steps.upload_artifact.outputs.artifact-url }}
-    outputs:
-      VERSION: ${{ steps.get_version.outputs.VERSION }}
-    steps:
-      - id: checkout
-        name: Checkout
-        uses: actions/checkout@main
-
-      - id: setup_rust
-        name: Setup Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-
-      - id: install_deps
-        name: Install Dependencies
-        run: |
-          sudo apt update && sudo apt install clang
-          cargo install trunk
-          rustup target add wasm32-unknown-unknown
-
-      - id: build_artifact
-        name: Build Artifact
-        run: trunk build
-        working-directory: xcad
-
-      - id: install_toml_cli
-        name: Install toml-cli
-        run: cargo install toml-cli
-
-      - id: get_version
-        name: Get Version
-        run: echo "VERSION=$(toml get xcad/Cargo.toml package.version)" >> $GITHUB_OUTPUT
-
-      - id: upload_artifact
-        name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend_artifact
-          path: xcad/dist/
-
   build_backend:
     runs-on: ubuntu-latest
     environment:
@@ -98,7 +53,7 @@ jobs:
           path: target/release/xcloud
 
   test:
-    needs: [build_frontend, build_backend]
+    needs: [build_backend]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.ref_name }}
@@ -118,30 +73,6 @@ jobs:
       - id: run_tests
         name: Run Tests
         run: cargo test --all
-
-  release_frontend:
-    needs: [build_frontend, test]
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name }}
-      url: ${{ steps.create_release.outputs.url }}
-    steps:
-      - id: download_artifact
-        name: Download Artifact
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: frontend_artifact
-
-      - id: create_release
-        name: Create Release
-        uses: softprops/action-gh-release@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          draft: ${{ contains(github.event.head_commit.message, '.draft') }}
-          generate_release_notes: true
-          prerelease: ${{ contains(github.event.head_commit.message, '.pre') }}
-          tag_name: ${{ needs.build_frontend.outputs.VERSION }}
 
   release_backend:
     needs: [build_backend, test]
